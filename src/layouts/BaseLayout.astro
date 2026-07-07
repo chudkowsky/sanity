@@ -1,0 +1,221 @@
+---
+interface Props {
+	title: string;
+	description?: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+		{description && <meta name="description" content={description} />}
+		<slot name="head" />
+
+		<style is:global>
+			:root{
+				--ink:      #10141b;
+				--panel:    #171c25;
+				--panel-2:  #1c222c;
+				--chalk:    #e8e4d9;
+				--muted:    #8b93a3;
+				--rule:     #272d38;
+				--seal:     #bb4a30;
+				--seal-text:#e2825f;
+				--verified: #6fa88a;
+				--verified-text: #93cbac;
+
+				--serif: ui-serif, "Iowan Old Style", "Palatino Linotype", "URW Palladio L", Georgia, serif;
+				--sans:  -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+				--mono:  ui-monospace, "SF Mono", "Cascadia Code", "Roboto Mono", Menlo, monospace;
+
+				--fs-h1: clamp(2.4rem, 4.6vw, 4rem);
+				--fs-h2: clamp(1.6rem, 2.6vw, 2.1rem);
+				--fs-h3: 1.3rem;
+				--fs-body: 1.05rem;
+				--fs-small: 0.92rem;
+				--fs-eyebrow: 0.72rem;
+			}
+
+			*{ box-sizing: border-box; }
+			body{
+				margin:0;
+				color: var(--chalk);
+				font-family: var(--sans);
+				font-size: var(--fs-body);
+				line-height: 1.65;
+				-webkit-font-smoothing: antialiased;
+			}
+
+			::selection{ background: var(--seal); color: var(--ink); }
+
+			a{ color: var(--seal-text); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+			a:focus-visible, button:focus-visible, .cta:focus-visible{
+				outline: 2px solid var(--verified-text);
+				outline-offset: 3px;
+			}
+
+			h1,h2,h3{
+				font-family: var(--serif);
+				font-weight: 500;
+				color: var(--chalk);
+				line-height: 1.12;
+				text-wrap: balance;
+				margin: 0;
+			}
+
+			.eyebrow{
+				font-family: var(--mono);
+				font-size: var(--fs-eyebrow);
+				letter-spacing: 0.14em;
+				text-transform: uppercase;
+				color: var(--muted);
+			}
+
+			.wrap{
+				max-width: 1040px;
+				margin: 0 auto;
+				padding: 0 clamp(20px, 5vw, 56px);
+			}
+
+			/* ---------- header ---------- */
+			header.site{
+				border-bottom: 1px solid var(--rule);
+				padding: 22px 0;
+			}
+			.site .wrap{ display:flex; align-items:center; justify-content:space-between; gap: 24px; }
+			.wordmark{
+				font-family: var(--mono);
+				font-size: 1rem;
+				letter-spacing: 0.05em;
+				color: var(--chalk);
+				text-decoration: none;
+			}
+			.wordmark span{ color: var(--seal-text); }
+			nav.site-nav{ display:flex; gap: 28px; font-family: var(--mono); font-size: 0.85rem; }
+			nav.site-nav a{ color: var(--muted); text-decoration: none; }
+			nav.site-nav a:hover{ color: var(--chalk); }
+			@media (max-width: 640px){ nav.site-nav{ display:none; } }
+
+			.cta{
+				display: inline-flex;
+				align-items: center;
+				gap: 10px;
+				font-family: var(--mono);
+				font-size: 0.9rem;
+				letter-spacing: 0.03em;
+				color: var(--ink);
+				background: var(--seal-text);
+				border: 1px solid var(--seal-text);
+				padding: 13px 22px;
+				text-decoration: none;
+			}
+			.cta:hover{ background: transparent; color: var(--seal-text); }
+			.cta::after{ content: "→"; }
+
+			/* ---------- section scaffolding ---------- */
+			section.doc{
+				padding: 64px 0;
+				border-bottom: 1px solid var(--rule);
+			}
+			section.doc .wrap{
+				display: grid;
+				grid-template-columns: 88px minmax(0,1fr);
+				gap: 8px 32px;
+			}
+			.section-ref{
+				font-family: var(--mono);
+				font-size: 0.78rem;
+				color: var(--muted);
+				letter-spacing: 0.08em;
+				padding-top: 6px;
+			}
+			.section-head{ grid-column: 2; margin-bottom: 30px; max-width: 620px; }
+			.section-head h2{ font-size: var(--fs-h2); margin-bottom: 12px; }
+			.section-head p{ color: var(--muted); margin:0; }
+			.section-body{ grid-column: 2; }
+			@media (max-width: 700px){
+				section.doc .wrap{ grid-template-columns: 1fr; }
+				.section-ref{ padding-top:0; margin-bottom: 10px; }
+				.section-head, .section-body{ grid-column: 1; }
+			}
+
+			/* ---------- background circuit grid ---------- */
+			.bg-circuit{
+				position: fixed;
+				inset: 0;
+				z-index: -1;
+				pointer-events: none;
+				background-color: var(--ink);
+				background-image:
+					linear-gradient(rgba(232,228,217,0.02) 1px, transparent 1px),
+					linear-gradient(90deg, rgba(232,228,217,0.02) 1px, transparent 1px),
+					radial-gradient(circle, rgba(226,130,95,0.16) 1.2px, transparent 1.2px);
+				background-size: 48px 48px, 48px 48px, 96px 96px;
+				animation: circuit-drift 60s linear infinite;
+			}
+			.bg-circuit::after{
+				content: "";
+				position: absolute;
+				inset: 0;
+				background: linear-gradient(115deg, transparent 30%, rgba(74,102,187,0.10) 45%, rgba(124,90,201,0.10) 55%, transparent 70%);
+				background-size: 300% 300%;
+				animation: circuit-sweep 20s ease-in-out infinite;
+				mix-blend-mode: screen;
+			}
+			@keyframes circuit-drift{
+				from{ background-position: 0 0, 0 0, 0 0; }
+				to{ background-position: 48px 48px, 48px 48px, 96px 96px; }
+			}
+			@keyframes circuit-sweep{
+				0%, 100%{ background-position: 0% 50%; }
+				50%{ background-position: 100% 50%; }
+			}
+
+			/* ---------- footer ---------- */
+			footer.site{ padding: 56px 0 64px; }
+			footer.site .wrap{ display:flex; flex-wrap:wrap; justify-content: space-between; gap: 24px; align-items:flex-end; }
+			footer.site h2{ font-size: 1.7rem; max-width: 30ch; }
+			footer.site .meta{ font-family: var(--mono); font-size: 0.78rem; color: var(--muted); text-align:right; }
+			footer.site .meta div + div{ margin-top: 4px; }
+
+			@media (prefers-reduced-motion: reduce){
+				* { animation: none !important; transition: none !important; }
+			}
+		</style>
+	</head>
+	<body>
+		<div class="bg-circuit" aria-hidden="true"></div>
+		<header class="site">
+			<div class="wrap">
+				<a class="wordmark" href="/">VI<span>·</span>SOFT</a>
+				<nav class="site-nav">
+					<a href="/#work">Work</a>
+					<a href="/#process">Process</a>
+					<a href="/#expertise">Expertise</a>
+					<a href="/blog">Blog</a>
+					<a href="/#contact">Contact</a>
+				</nav>
+			</div>
+		</header>
+
+		<slot />
+
+		<footer class="site" id="contact">
+			<div class="wrap">
+				<h2>Bring us the protocol. We'll bring the proof.</h2>
+				<div class="meta">
+					<div>hello@visoft.dev</div>
+					<div>NDA on request, before any call</div>
+					<div>© Visoft</div>
+				</div>
+			</div>
+		</footer>
+	</body>
+</html>

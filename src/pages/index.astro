@@ -1,0 +1,476 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const faqJsonLd = {
+	"@context": "https://schema.org",
+	"@type": "FAQPage",
+	"mainEntity": [
+		{
+			"@type": "Question",
+			"name": "Do you work with early-stage startups that don't have a technical cofounder yet?",
+			"acceptedAnswer": { "@type": "Answer", "text": "Yes. We commonly work as the technical execution arm for non-technical founders, though we recommend at least one technical stakeholder on the client side to own long-term maintenance decisions." }
+		},
+		{
+			"@type": "Question",
+			"name": "Who owns the code and IP after the project ships?",
+			"acceptedAnswer": { "@type": "Answer", "text": "The client does, fully, on delivery. Visoft does not retain licensing rights, equity stakes, or reuse rights over project-specific code or circuits." }
+		},
+		{
+			"@type": "Question",
+			"name": "Can you work with an existing in-house team instead of replacing it?",
+			"acceptedAnswer": { "@type": "Answer", "text": "Yes — embedded engagements are designed to plug into your existing team and workflow rather than operate as a separate silo." }
+		},
+		{
+			"@type": "Question",
+			"name": "How do you handle confidentiality for unpublished research or unannounced protocols?",
+			"acceptedAnswer": { "@type": "Answer", "text": "An NDA is signed before any technical discovery call. Research-stage clients can also request that scoping discussions happen without any public-facing artifacts being created." }
+		},
+		{
+			"@type": "Question",
+			"name": "What if our technical direction changes mid-project?",
+			"acceptedAnswer": { "@type": "Answer", "text": "Flexible and fixed-scope engagements both include a defined re-scoping checkpoint, so a pivot in protocol design or research direction doesn't require canceling and restarting the engagement." }
+		}
+	]
+};
+---
+
+<BaseLayout
+	title="Visoft — Web3, ZK &amp; Fintech Engineering Partner"
+	description="Visoft builds and ships web3, zero-knowledge, TLSN and fintech infrastructure for startups and research teams — from protocol design to production."
+>
+	<Fragment slot="head">
+		<meta property="og:title" content="Web3, ZK &amp; Fintech Development Partner for Startups | Visoft" />
+		<meta property="og:description" content="Visoft builds and ships web3, zero-knowledge, TLSN and fintech infrastructure for startups and research teams — from protocol design to production." />
+		<script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+	</Fragment>
+
+	<section class="hero">
+		<div class="wrap">
+			<span class="eyebrow">Web3 · Zero-Knowledge · TLSN · Fintech</span>
+			<h1>Engineering partner for teams that can't afford to wait</h1>
+			<p class="lede">Tired of agencies that need six weeks of onboarding to understand what a nullifier is? Visoft builds for cryptography-heavy, high-stakes domains — web3 protocols, zero-knowledge systems, TLSN-based verification, fintech infrastructure — where "we'll figure it out as we go" isn't good enough.</p>
+			<p class="lede">Every engagement starts with engineers who already speak your stack. You get production-grade code, reviewed cryptographic assumptions, and a team that ships on the timeline a fundraising round or research deadline actually demands.</p>
+			<a class="cta" href="#process">See how we work</a>
+			<div class="marquee">
+				<div class="marquee-track">
+					<span>Solidity</span><span>circom</span><span>halo2</span><span>groth16</span><span>plonk</span><span>TLSN</span><span>MPC-TLS</span><span>FROST</span><span>Schnorr</span><span>Rust</span><span>Move</span><span>EVM</span>
+					<span>Solidity</span><span>circom</span><span>halo2</span><span>groth16</span><span>plonk</span><span>TLSN</span><span>MPC-TLS</span><span>FROST</span><span>Schnorr</span><span>Rust</span><span>Move</span><span>EVM</span>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="doc" id="work">
+		<div class="wrap">
+			<div class="section-ref">§ 01</div>
+			<div class="section-head">
+				<h2>What makes Visoft the right build partner</h2>
+				<p>Working with a specialized team isn't about hiring extra hands — it's about removing the translation layer between what you need and what gets built.</p>
+			</div>
+			<div class="section-body">
+				<div class="ledger">
+					<div>
+						<h3>Speed without the ramp-up</h3>
+						<p>Engineers are matched to your stack from day one — Solidity, circom, halo2, TLSN, Rust — so the first two weeks are spent shipping, not explaining what a Merkle proof is.</p>
+					</div>
+					<div>
+						<h3>Production-grade quality</h3>
+						<p>Code ships with test coverage, audited-style review practices, and documentation a future auditor or new hire can actually follow.</p>
+					</div>
+					<div>
+						<h3>Flexible engagement, no lock-in</h3>
+						<p>Scale from one embedded engineer to a full team, month to month, without long-term contracts or scopes that stop making sense mid-research.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="doc" id="process">
+		<div class="wrap">
+			<div class="section-ref">§ 02</div>
+			<div class="section-head">
+				<h2>How we take a project from idea to production</h2>
+				<p>Every engagement — a zero-knowledge circuit, a TLSN integration, a fintech settlement layer — follows the same four-stage process.</p>
+			</div>
+			<div class="section-body">
+				<div class="timeline">
+					<div class="step">
+						<div class="num">01</div>
+						<div>
+							<h3>Scoping and technical discovery</h3>
+							<p>We map the protocol, threat model, and integration points with your team, so the architecture is validated before it's expensive to change.</p>
+						</div>
+					</div>
+					<div class="step">
+						<div class="num">02</div>
+						<div>
+							<h3>Architecture and proof-of-concept</h3>
+							<p>We design the system — circuits, contracts, or verification flows — and validate the riskiest assumptions first with a working proof-of-concept.</p>
+						</div>
+					</div>
+					<div class="step">
+						<div class="num">03</div>
+						<div>
+							<h3>Iterative development in sprints</h3>
+							<p>Engineers build in short, reviewable cycles with your team looped in continuously — no month-long silence before a surprise delivery.</p>
+						</div>
+					</div>
+					<div class="step">
+						<div class="num">04</div>
+						<div>
+							<h3>Delivery, handoff, and ongoing support</h3>
+							<p>Code ships with documentation and test coverage your team can maintain independently, with optional support for audits, upgrades, or scaling.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="doc">
+		<div class="wrap">
+			<div class="section-ref">§ 03</div>
+			<div class="section-head">
+				<h2>What we build</h2>
+				<p>Four domains, one engineering standard.</p>
+			</div>
+			<div class="section-body">
+				<div class="grid-2">
+					<div>
+						<h3>Web3 &amp; smart contract systems</h3>
+						<p>Protocol and smart contract development across EVM and non-EVM chains, built for teams that need code ready for an audit, not just a testnet demo.</p>
+					</div>
+					<div>
+						<h3>Zero-knowledge systems</h3>
+						<p>Circuit design and implementation using circom, halo2, and related toolchains, for privacy-preserving or scalability-focused ZK applications.</p>
+					</div>
+					<div>
+						<h3>TLSN &amp; verifiable web data</h3>
+						<p>Integration of TLS Notary-based proof systems for teams that need to verify off-chain data without trusting a centralized oracle.</p>
+					</div>
+					<div>
+						<h3>Fintech &amp; settlement infrastructure</h3>
+						<p>Trading engines, escrow logic, and settlement systems for fintech startups building products where correctness bugs mean lost funds.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="doc">
+		<div class="wrap">
+			<div class="section-ref">§ 04</div>
+			<div class="section-head">
+				<h2>Engagement models built for startups and research teams</h2>
+			</div>
+			<div class="section-body">
+				<ul class="deed">
+					<li><span><strong>Embedded engineers</strong> who join your existing team and report into your process, not a separate agency workflow.</span></li>
+					<li><span><strong>Fixed-scope builds</strong> for teams that need a defined deliverable — a circuit, an integration, an audit-prep pass — on a fixed timeline.</span></li>
+					<li><span><strong>Flexible month-to-month scaling</strong> for research projects and startups whose direction shifts as findings come in.</span></li>
+				</ul>
+			</div>
+		</div>
+	</section>
+
+	<section class="doc">
+		<div class="wrap">
+			<div class="section-ref">§ 05</div>
+			<div class="section-head">
+				<h2>Why teams choose Visoft</h2>
+			</div>
+			<div class="section-body">
+				<div class="ledger">
+					<div>
+						<h3>Domain fluency, not just availability</h3>
+						<p>Engineers arrive already fluent in the primitives — commitments, threshold signatures, selective disclosure — so discussions move at the pace your team expects.</p>
+					</div>
+					<div>
+						<h3>Built for scrutiny</h3>
+						<p>Every deliverable is written assuming it will eventually face an external audit, a research reviewer, or a skeptical technical co-founder.</p>
+					</div>
+					<div>
+						<h3>Continuity across the lifecycle</h3>
+						<p>The same engineers who scope the architecture ship the code and support it post-launch — context never gets lost in a handoff.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="doc" id="expertise">
+		<div class="wrap">
+			<div class="section-ref">§ 06</div>
+			<div class="section-head">
+				<h2>The expertise behind every build</h2>
+			</div>
+			<div class="section-body">
+				<div class="expertise-item">
+					<h3>Zero-knowledge proof systems</h3>
+					<p>Practical experience across proving systems, applied to real constraints around circuit size, prover time, and verification cost.</p>
+					<div class="tags"><span>circom</span><span>halo2</span><span>groth16</span><span>plonk</span></div>
+				</div>
+				<div class="expertise-item">
+					<h3>TLS Notary (TLSN) integrations</h3>
+					<p>Implementation of TLSN-based attestation flows that let applications verify real-world data without a trusted intermediary.</p>
+					<div class="tags"><span>TLSN</span><span>selective disclosure</span><span>MPC-TLS</span></div>
+				</div>
+				<div class="expertise-item">
+					<h3>Threshold signatures &amp; distributed key systems</h3>
+					<p>Design and implementation of threshold signing schemes for teams that need to remove single points of control from fund movement.</p>
+					<div class="tags"><span>FROST</span><span>Schnorr</span><span>MPC</span></div>
+				</div>
+				<div class="expertise-item">
+					<h3>Smart contract &amp; protocol engineering</h3>
+					<p>Contract architecture and implementation across EVM and non-EVM environments, written with audit-readiness as a default.</p>
+					<div class="tags"><span>Solidity</span><span>Rust</span><span>Move</span><span>EVM</span></div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="doc">
+		<div class="wrap">
+			<div class="section-ref">§ 07</div>
+			<div class="section-head">
+				<h2>Explore more</h2>
+			</div>
+			<div class="section-body">
+				<div class="hub">
+					<a href="/blog"><span class="eyebrow">Blog</span>Writing on web3, zero-knowledge, TLSN, and fintech engineering.</a>
+					<a href="#"><span class="eyebrow">Tech Stack</span>The tools, languages, and cryptographic primitives our engineers work in daily.</a>
+					<a href="#"><span class="eyebrow">Engagement Models</span>How embedded, fixed-scope, and flexible engagements are priced and scoped.</a>
+					<a href="#"><span class="eyebrow">FAQ</span>Answers on IP ownership, NDAs, timelines, and technical scoping.</a>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="doc">
+		<div class="wrap">
+			<div class="section-ref">§ 08</div>
+			<div class="section-head">
+				<h2>What to know before you engage</h2>
+				<p>Working with a specialized partner still means a few things are on you to get right.</p>
+			</div>
+			<div class="section-body">
+				<div class="fine-print">
+					<div>
+						<h3>IP AND OWNERSHIP ARE YOURS</h3>
+						<p>All code, circuits, and documentation produced under an engagement are owned by the client on delivery — Visoft retains no rights to project-specific work.</p>
+					</div>
+					<div>
+						<h3>SCOPING DETERMINES THE TIMELINE</h3>
+						<p>Fixed-scope estimates are only as accurate as the discovery phase; skipping it to save time typically costs more time later.</p>
+					</div>
+					<div>
+						<h3>NDAS ARE STANDARD, NOT AN UPSELL</h3>
+						<p>Confidentiality agreements are signed before any technical discovery call, since most clients work on unannounced protocols or unpublished research.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="doc">
+		<div class="wrap">
+			<div class="section-ref">§ 09</div>
+			<div class="section-head">
+				<h2>Frequently asked questions</h2>
+			</div>
+			<div class="section-body">
+				<div class="faq-item">
+					<h3>Do you work with early-stage startups that don't have a technical cofounder yet?</h3>
+					<p>Yes. We commonly work as the technical execution arm for non-technical founders, though we recommend at least one technical stakeholder on the client side to own long-term maintenance decisions.</p>
+				</div>
+				<div class="faq-item">
+					<h3>Who owns the code and IP after the project ships?</h3>
+					<p>The client does, fully, on delivery. Visoft does not retain licensing rights, equity stakes, or reuse rights over project-specific code or circuits.</p>
+				</div>
+				<div class="faq-item">
+					<h3>Can you work with an existing in-house team instead of replacing it?</h3>
+					<p>Yes — embedded engagements are designed to plug into your existing team and workflow rather than operate as a separate silo.</p>
+				</div>
+				<div class="faq-item">
+					<h3>How do you handle confidentiality for unpublished research or unannounced protocols?</h3>
+					<p>An NDA is signed before any technical discovery call. Research-stage clients can request that scoping discussions happen without any public-facing artifacts being created.</p>
+				</div>
+				<div class="faq-item">
+					<h3>What if our technical direction changes mid-project?</h3>
+					<p>Flexible and fixed-scope engagements both include a defined re-scoping checkpoint, so a pivot doesn't require canceling and restarting.</p>
+				</div>
+			</div>
+		</div>
+	</section>
+</BaseLayout>
+
+<style>
+	/* ---------- hero ---------- */
+	.hero{
+		position: relative;
+		padding: 88px 0 72px;
+		border-bottom: 1px solid var(--rule);
+		overflow: hidden;
+	}
+	.hero .wrap{ position: relative; z-index: 1; max-width: 780px; }
+	.hero .eyebrow{ margin-bottom: 18px; display:block; }
+	.hero h1{ font-size: var(--fs-h1); margin-bottom: 26px; }
+	.hero p.lede{
+		font-size: 1.12rem;
+		color: var(--muted);
+		max-width: 62ch;
+		margin: 0 0 14px;
+	}
+	.hero p.lede + p.lede{ margin-bottom: 34px; }
+
+	.marquee{
+		margin-top: 56px;
+		padding-top: 28px;
+		border-top: 1px solid var(--rule);
+		overflow: hidden;
+		mask-image: linear-gradient(90deg, transparent, black 20%, black 80%, transparent);
+		-webkit-mask-image: linear-gradient(90deg, transparent, black 20%, black 80%, transparent);
+	}
+	.marquee-track{
+		display: flex;
+		width: max-content;
+		gap: 48px;
+		animation: marquee-scroll 28s linear infinite;
+	}
+	.marquee-track span{
+		font-family: var(--mono);
+		font-size: 0.8rem;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--muted);
+		white-space: nowrap;
+	}
+	@keyframes marquee-scroll{
+		from{ transform: translateX(0); }
+		to{ transform: translateX(-50%); }
+	}
+
+	/* ---------- ledger panels (pillars / why-us) ---------- */
+	.ledger{
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0,1fr));
+		gap: 0;
+		border: 1px solid var(--rule);
+	}
+	.ledger > div{
+		padding: 26px 24px;
+		border-left: 1px solid var(--rule);
+	}
+	.ledger > div:first-child{ border-left: none; }
+	.ledger h3{ font-size: 1.08rem; margin-bottom: 10px; }
+	.ledger p{ color: var(--muted); font-size: var(--fs-small); margin:0; }
+	@media (max-width: 700px){
+		.ledger{ grid-template-columns: 1fr; }
+		.ledger > div{ border-left:none; border-top: 1px solid var(--rule); }
+		.ledger > div:first-child{ border-top:none; }
+	}
+
+	/* ---------- process timeline ---------- */
+	.timeline{ position: relative; }
+	.step{
+		display:grid;
+		grid-template-columns: 52px 1fr;
+		gap: 20px;
+		padding: 22px 0;
+		border-top: 1px solid var(--rule);
+	}
+	.step:first-child{ border-top: none; padding-top: 0; }
+	.step .num{
+		font-family: var(--mono);
+		color: var(--seal-text);
+		font-size: 0.95rem;
+		padding-top: 3px;
+	}
+	.step h3{ font-size: 1.05rem; margin-bottom: 8px; }
+	.step p{ color: var(--muted); margin:0; font-size: var(--fs-small); }
+
+	/* ---------- build grid ---------- */
+	.grid-2{
+		display:grid;
+		grid-template-columns: repeat(2, minmax(0,1fr));
+		gap: 1px;
+		background: var(--rule);
+		border: 1px solid var(--rule);
+	}
+	.grid-2 > div{ background: var(--panel); padding: 26px 26px; }
+	.grid-2 h3{ font-size: 1.05rem; margin-bottom: 10px; }
+	.grid-2 p{ color: var(--muted); font-size: var(--fs-small); margin:0; }
+	@media (max-width: 700px){ .grid-2{ grid-template-columns: 1fr; } }
+
+	/* ---------- plain list (engagement models) ---------- */
+	ul.deed{ margin:0; padding:0; list-style:none; }
+	ul.deed li{
+		padding: 16px 0;
+		border-top: 1px solid var(--rule);
+		color: var(--muted);
+		font-size: var(--fs-small);
+		display:flex; gap: 14px;
+	}
+	ul.deed li:first-child{ border-top:none; padding-top:0; }
+	ul.deed li::before{ content: "—"; color: var(--seal-text); flex-shrink:0; }
+	ul.deed strong{ color: var(--chalk); font-weight: 600; }
+
+	/* ---------- expertise tags ---------- */
+	.expertise-item{ margin-bottom: 26px; }
+	.expertise-item:last-child{ margin-bottom:0; }
+	.expertise-item h3{ font-size: 1.02rem; margin-bottom: 6px; }
+	.expertise-item p{ color: var(--muted); font-size: var(--fs-small); margin: 0 0 10px; }
+	.tags{ display:flex; flex-wrap:wrap; gap: 8px; }
+	.tags span{
+		font-family: var(--mono);
+		font-size: 0.74rem;
+		color: var(--verified-text);
+		border: 1px solid var(--rule);
+		padding: 4px 9px;
+	}
+
+	/* ---------- explore hub ---------- */
+	.hub{
+		display:grid;
+		grid-template-columns: repeat(4, minmax(0,1fr));
+		gap: 1px;
+		background: var(--rule);
+		border: 1px solid var(--rule);
+	}
+	.hub a{
+		background: var(--panel);
+		color: var(--chalk);
+		text-decoration:none;
+		padding: 22px 20px;
+		display:block;
+	}
+	.hub a:hover{ background: var(--panel-2); }
+	.hub .eyebrow{ display:block; margin-bottom: 10px; color: var(--seal-text); }
+	.hub p{ color: var(--muted); font-size: 0.86rem; margin: 8px 0 0; }
+	@media (max-width: 800px){ .hub{ grid-template-columns: repeat(2, 1fr); } }
+	@media (max-width: 480px){ .hub{ grid-template-columns: 1fr; } }
+
+	/* ---------- fine print / trust ---------- */
+	.fine-print{
+		background: var(--panel);
+		border: 1px solid var(--rule);
+		padding: 30px 30px;
+	}
+	.fine-print h3{
+		font-family: var(--mono);
+		font-size: 0.85rem;
+		letter-spacing: 0.04em;
+		color: var(--verified-text);
+		margin-bottom: 8px;
+		font-weight: 600;
+	}
+	.fine-print > div + div{ margin-top: 20px; padding-top: 20px; border-top: 1px dashed var(--rule); }
+	.fine-print p{ color: var(--muted); margin:0; font-size: var(--fs-small); }
+
+	/* ---------- faq ---------- */
+	.faq-item{ border-top: 1px solid var(--rule); padding: 20px 0; }
+	.faq-item:first-child{ border-top:none; padding-top:0; }
+	.faq-item h3{ font-size: 1rem; margin-bottom: 8px; font-family: var(--sans); font-weight: 600; }
+	.faq-item p{ color: var(--muted); margin:0; font-size: var(--fs-small); }
+</style>

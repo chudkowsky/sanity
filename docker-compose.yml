@@ -1,0 +1,12 @@
+services:
+  web:
+    build:
+      context: .
+      args:
+        SANITY_PROJECT_ID: ${SANITY_PROJECT_ID}
+        SANITY_DATASET: ${SANITY_DATASET}
+    image: visoft-promo:latest
+    container_name: visoft-promo
+    restart: unless-stopped
+    ports:
+      - "8010:80"

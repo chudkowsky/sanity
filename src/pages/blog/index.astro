@@ -1,0 +1,102 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { sanityClient } from "../../lib/sanity";
+
+const posts = await sanityClient.fetch(`
+  *[_type == "blogPost"] | order(publishedAt desc) {
+    title,
+    slug,
+    publishedAt,
+    excerpt
+  }
+`);
+
+function formatDate(dateStr: string) {
+	if (!dateStr) return "";
+	return new Date(dateStr).toLocaleDateString("en-US", {
+		year: "numeric",
+		month: "short",
+		day: "numeric",
+	});
+}
+---
+
+<BaseLayout
+	title="Blog | Visoft"
+	description="Writing on web3, zero-knowledge, TLSN, and fintech engineering from the Visoft team."
+>
+	<section class="hero hero--sub">
+		<div class="wrap">
+			<span class="eyebrow">Notes &amp; Field Reports</span>
+			<h1>The Visoft blog</h1>
+			<p class="lede">Writing on web3 protocols, zero-knowledge systems, TLSN, and fintech infrastructure — from the engineers building it.</p>
+		</div>
+	</section>
+
+	<section class="doc">
+		<div class="wrap">
+			<div class="section-ref">§ 01</div>
+			<div class="section-head">
+				<h2>All posts</h2>
+			</div>
+			<div class="section-body">
+				{posts.length === 0 && <p class="empty">Nothing published yet — check back soon.</p>}
+				<ul class="post-list">
+					{posts.map((post: any) => (
+						<li>
+							<a class="post-link" href={`/blog/${post.slug.current}`}>
+								{post.publishedAt && <span class="post-date">{formatDate(post.publishedAt)}</span>}
+								<h3>{post.title}</h3>
+								{post.excerpt && <p>{post.excerpt}</p>}
+							</a>
+						</li>
+					))}
+				</ul>
+			</div>
+		</div>
+	</section>
+</BaseLayout>
+
+<style>
+	.hero--sub{
+		padding: 72px 0 56px;
+		border-bottom: 1px solid var(--rule);
+	}
+	.hero--sub .wrap{ max-width: 780px; }
+	.hero--sub .eyebrow{ margin-bottom: 18px; display:block; }
+	.hero--sub h1{ font-size: var(--fs-h1); margin-bottom: 20px; }
+	.hero--sub .lede{ font-size: 1.12rem; color: var(--muted); max-width: 62ch; margin: 0; }
+
+	.empty{ color: var(--muted); }
+
+	ul.post-list{ margin:0; padding:0; list-style:none; }
+	ul.post-list li{ border-top: 1px solid var(--rule); }
+	ul.post-list li:first-child{ border-top:none; }
+
+	.post-link{
+		display:block;
+		padding: 26px 0;
+		text-decoration: none;
+		color: inherit;
+	}
+	.post-link:hover h3{ color: var(--seal-text); }
+
+	.post-date{
+		font-family: var(--mono);
+		font-size: 0.78rem;
+		color: var(--muted);
+		letter-spacing: 0.04em;
+		display: block;
+		margin-bottom: 8px;
+	}
+	.post-link h3{
+		font-size: 1.2rem;
+		margin-bottom: 8px;
+	}
+	.post-link p{
+		color: var(--muted);
+		font-size: var(--fs-small);
+		margin: 0;
+		max-width: 68ch;
+	}
+</style>
