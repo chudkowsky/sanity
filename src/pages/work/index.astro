@@ -1,0 +1,245 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { sanityClient } from "../../lib/sanity";
+
+const projects = await sanityClient.fetch(`
+  *[_type == "project"] | order(publishedAt desc) {
+    title,
+    slug,
+    category,
+    client,
+    publishedAt,
+    excerpt,
+    tags,
+    "coverImageUrl": coverImage.asset->url
+  }
+`);
+
+function formatDate(dateStr: string) {
+	if (!dateStr) return "";
+	return new Date(dateStr).toLocaleDateString("en-US", {
+		year: "numeric",
+		month: "short",
+	});
+}
+
+const categories = Array.from(
+	new Set(projects.filter((p: any) => p.category).map((p: any) => p.category))
+).sort((a: any, b: any) => a.localeCompare(b));
+
+const grouped = categories.map((category: any) => ({
+	category,
+	items: projects.filter((p: any) => p.category === category),
+}));
+
+const uncategorized = projects.filter((p: any) => !p.category);
+---
+
+<BaseLayout
+	title="Work | Visoft"
+	description="Starknet infrastructure, zero-knowledge proving pipelines, and TEE-based systems shipped by the Visoft team."
+>
+	<section class="hero hero--sub">
+		<div class="wrap">
+			<span class="eyebrow">Shipped Work</span>
+			<h1>Projects we've built</h1>
+			<p class="lede">Starknet infrastructure, zero-knowledge proving pipelines, and confidential compute systems — built and shipped by the engineers who write about them.</p>
+		</div>
+	</section>
+
+	{projects.length === 0 && (
+		<section class="doc">
+			<div class="wrap">
+				<div class="section-ref">§ 01</div>
+				<div class="section-body"><p class="empty">Nothing published yet — check back soon.</p></div>
+			</div>
+		</section>
+	)}
+
+	{grouped.map((group, i) => (
+		<section class="doc">
+			<div class="wrap">
+				<div class="section-ref">§ {String(i + 1).padStart(2, "0")}</div>
+				<div class="section-head">
+					<h2>{group.category}</h2>
+				</div>
+				<div class="section-body">
+					<div class="project-grid">
+						{group.items.map((project: any) => (
+							<a class="project-card" href={`/work/${project.slug.current}`}>
+								<div class="project-thumb">
+									{project.coverImageUrl
+										? <img src={project.coverImageUrl} alt="" loading="lazy" />
+										: <div class="project-thumb-fallback" aria-hidden="true"></div>
+									}
+								</div>
+								<div class="project-card-body">
+									<div class="project-meta">
+										{project.client && <span class="project-client">{project.client}</span>}
+										{project.publishedAt && <span class="project-date">{formatDate(project.publishedAt)}</span>}
+									</div>
+									<h3>{project.title}</h3>
+									{project.excerpt && <p>{project.excerpt}</p>}
+									{project.tags && project.tags.length > 0 && (
+										<div class="tags">
+											{project.tags.map((tag: string) => <span>{tag}</span>)}
+										</div>
+									)}
+								</div>
+							</a>
+						))}
+					</div>
+				</div>
+			</div>
+		</section>
+	))}
+
+	{uncategorized.length > 0 && (
+		<section class="doc">
+			<div class="wrap">
+				<div class="section-ref">§ {String(grouped.length + 1).padStart(2, "0")}</div>
+				<div class="section-head">
+					<h2>Other work</h2>
+				</div>
+				<div class="section-body">
+					<div class="project-grid">
+						{uncategorized.map((project: any) => (
+							<a class="project-card" href={`/work/${project.slug.current}`}>
+								<div class="project-thumb">
+									{project.coverImageUrl
+										? <img src={project.coverImageUrl} alt="" loading="lazy" />
+										: <div class="project-thumb-fallback" aria-hidden="true"></div>
+									}
+								</div>
+								<div class="project-card-body">
+									<div class="project-meta">
+										{project.client && <span class="project-client">{project.client}</span>}
+										{project.publishedAt && <span class="project-date">{formatDate(project.publishedAt)}</span>}
+									</div>
+									<h3>{project.title}</h3>
+									{project.excerpt && <p>{project.excerpt}</p>}
+									{project.tags && project.tags.length > 0 && (
+										<div class="tags">
+											{project.tags.map((tag: string) => <span>{tag}</span>)}
+										</div>
+									)}
+								</div>
+							</a>
+						))}
+					</div>
+				</div>
+			</div>
+		</section>
+	)}
+</BaseLayout>
+
+<style>
+	.hero--sub{
+		padding: 72px 0 56px;
+		border-bottom: 1px solid var(--rule);
+	}
+	.hero--sub .wrap{ max-width: 780px; }
+	.hero--sub .eyebrow{ margin-bottom: 18px; display:block; }
+	.hero--sub h1{ font-size: var(--fs-h1); margin-bottom: 20px; }
+	.hero--sub .lede{ font-size: 1.12rem; color: var(--muted); max-width: 62ch; margin: 0; }
+
+	.empty{ color: var(--muted); }
+
+	.project-grid{
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0,1fr));
+		gap: 24px;
+	}
+	@media (max-width: 700px){
+		.project-grid{ grid-template-columns: 1fr; }
+	}
+
+	.project-card{
+		display: flex;
+		flex-direction: column;
+		background: var(--panel);
+		border: 1px solid var(--rule);
+		text-decoration: none;
+		color: inherit;
+	}
+	.project-card:hover{ background: var(--panel-2); border-color: var(--seal-text); }
+	.project-card:hover h3{ color: var(--seal-text); }
+
+	.project-thumb{
+		aspect-ratio: 16 / 9;
+		overflow: hidden;
+		border-bottom: 1px solid var(--rule);
+	}
+	.project-thumb img{
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+	}
+	.project-thumb-fallback{
+		width: 100%;
+		height: 100%;
+		background-color: var(--ink);
+		background-image:
+			linear-gradient(rgba(232,228,217,0.045) 1px, transparent 1px),
+			linear-gradient(90deg, rgba(232,228,217,0.045) 1px, transparent 1px);
+		background-size: 22px 22px;
+		position: relative;
+	}
+	.project-thumb-fallback::after{
+		content: "VI·SOFT";
+		position: absolute;
+		inset: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-family: var(--mono);
+		font-size: 0.72rem;
+		letter-spacing: 0.16em;
+		color: var(--seal-text);
+		opacity: 0.55;
+	}
+
+	.project-card-body{
+		padding: 22px 24px 26px;
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.project-meta{
+		display: flex;
+		gap: 14px;
+		align-items: center;
+		margin-bottom: 8px;
+	}
+	.project-client{
+		font-family: var(--mono);
+		font-size: 0.78rem;
+		color: var(--verified-text);
+		letter-spacing: 0.04em;
+	}
+	.project-date{
+		font-family: var(--mono);
+		font-size: 0.78rem;
+		color: var(--muted);
+		letter-spacing: 0.04em;
+	}
+	.project-card h3{
+		font-size: 1.2rem;
+		margin-bottom: 8px;
+	}
+	.project-card p{
+		color: var(--muted);
+		font-size: var(--fs-small);
+		margin: 0 0 14px;
+	}
+	.tags{ display:flex; flex-wrap:wrap; gap: 8px; margin-top: auto; }
+	.tags span{
+		font-family: var(--mono);
+		font-size: 0.72rem;
+		color: var(--muted);
+		border: 1px solid var(--rule);
+		padding: 3px 9px;
+	}
+</style>

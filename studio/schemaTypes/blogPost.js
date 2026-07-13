@@ -34,6 +34,13 @@ export const blogPost = {
       options: { hotspot: true },
     },
     {
+      name: "tags",
+      title: "Kategorie / tagi",
+      type: "array",
+      of: [{ type: "string" }],
+      options: { layout: "tags" },
+    },
+    {
       name: "body",
       title: "Treść",
       type: "array",

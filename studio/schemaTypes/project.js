@@ -1,6 +1,6 @@
-export const caseStudy = {
-  name: "caseStudy",
-  title: "Case Study",
+export const project = {
+  name: "project",
+  title: "Project",
   type: "document",
   fields: [
     {
@@ -14,6 +14,13 @@ export const caseStudy = {
       title: "Slug (URL)",
       type: "slug",
       options: { source: "title" },
+      validation: (Rule) => Rule.required(),
+    },
+    {
+      name: "category",
+      title: "Kategoria",
+      description: "Dowolna nazwa kategorii — projekty z tą samą kategorią zostaną automatycznie zgrupowane na /work.",
+      type: "string",
       validation: (Rule) => Rule.required(),
     },
     {

@@ -1,4 +1,4 @@
 import { blogPost } from "./blogPost";
-import { caseStudy } from "./caseStudy";
+import { project } from "./project";
 
-export const schemaTypes = [blogPost, caseStudy];
+export const schemaTypes = [blogPost, project];

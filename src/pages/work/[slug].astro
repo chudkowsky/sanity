@@ -4,22 +4,24 @@ import { sanityClient } from "../../lib/sanity";
 import { toHTML } from "@portabletext/to-html";
 
 export async function getStaticPaths() {
-  const posts = await sanityClient.fetch(`
-    *[_type == "blogPost"] {
+  const projects = await sanityClient.fetch(`
+    *[_type == "project"] {
       slug
     }
   `);
 
-  return posts.map((post: any) => ({
-    params: { slug: post.slug.current },
+  return projects.map((project: any) => ({
+    params: { slug: project.slug.current },
   }));
 }
 
 const { slug } = Astro.params;
 
-const post = await sanityClient.fetch(`
-  *[_type == "blogPost" && slug.current == $slug][0] {
+const project = await sanityClient.fetch(`
+  *[_type == "project" && slug.current == $slug][0] {
     title,
+    category,
+    client,
     publishedAt,
     excerpt,
     tags,
@@ -27,22 +29,17 @@ const post = await sanityClient.fetch(`
   }
 `, { slug });
 
-if (!post) return Astro.redirect("/404");
-
-function tagSlug(tag: string) {
-  return tag.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
-}
+if (!project) return Astro.redirect("/404");
 
 function formatDate(dateStr: string) {
   if (!dateStr) return "";
   return new Date(dateStr).toLocaleDateString("en-US", {
     year: "numeric",
     month: "short",
-    day: "numeric",
   });
 }
 
-const bodyHTML = post.body ? toHTML(post.body, {
+const bodyHTML = project.body ? toHTML(project.body, {
   components: {
     types: {
       code: ({ value }: any) => `<pre><code class="language-${value.language}">${value.code}</code></pre>`,
@@ -52,18 +49,20 @@ const bodyHTML = post.body ? toHTML(post.body, {
 }) : "";
 ---
 
-<BaseLayout title={`${post.title} | Visoft`} description={post.excerpt}>
+<BaseLayout title={`${project.title} | Visoft`} description={project.excerpt}>
   <section class="hero hero--sub">
     <div class="wrap">
-      <a class="back-link" href="/blog">← Back to blog</a>
-      {post.publishedAt && <span class="post-date">{formatDate(post.publishedAt)}</span>}
-      <h1>{post.title}</h1>
-      {post.excerpt && <p class="lede">{post.excerpt}</p>}
-      {post.tags && post.tags.length > 0 && (
+      <a class="back-link" href="/work">← Back to work</a>
+      <div class="project-meta">
+        {project.category && <span class="project-category">{project.category}</span>}
+        {project.client && <span class="project-client">{project.client}</span>}
+        {project.publishedAt && <span class="project-date">{formatDate(project.publishedAt)}</span>}
+      </div>
+      <h1>{project.title}</h1>
+      {project.excerpt && <p class="lede">{project.excerpt}</p>}
+      {project.tags && project.tags.length > 0 && (
         <div class="tags">
-          {post.tags.map((tag: string) => (
-            <a class="tag-pill" href={`/blog/category/${tagSlug(tag)}`}>{tag}</a>
-          ))}
+          {project.tags.map((tag: string) => <span>{tag}</span>)}
         </div>
       )}
     </div>
@@ -72,7 +71,7 @@ const bodyHTML = post.body ? toHTML(post.body, {
   <section class="doc">
     <div class="wrap">
       <div class="section-ref">§ 01</div>
-      <div class="section-body post-body" set:html={bodyHTML} />
+      <div class="section-body project-body" set:html={bodyHTML} />
     </div>
   </section>
 </BaseLayout>
@@ -86,17 +85,6 @@ const bodyHTML = post.body ? toHTML(post.body, {
   .hero--sub h1{ font-size: var(--fs-h1); margin: 14px 0 20px; }
   .hero--sub .lede{ font-size: 1.12rem; color: var(--muted); max-width: 62ch; margin: 0 0 20px; }
 
-  .tags{ display:flex; flex-wrap:wrap; gap: 8px; }
-  .tag-pill{
-    font-family: var(--mono);
-    font-size: 0.72rem;
-    color: var(--verified-text);
-    border: 1px solid var(--rule);
-    padding: 3px 9px;
-    text-decoration: none;
-  }
-  .tag-pill:hover{ border-color: var(--verified-text); }
-
   .back-link{
     font-family: var(--mono);
     font-size: 0.85rem;
@@ -106,50 +94,76 @@ const bodyHTML = post.body ? toHTML(post.body, {
   }
   .back-link:hover{ color: var(--chalk); }
 
-  .post-date{
+  .project-meta{
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    margin-top: 18px;
+  }
+  .project-category{
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--seal-text);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .project-client{
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--verified-text);
+    letter-spacing: 0.04em;
+  }
+  .project-date{
     font-family: var(--mono);
     font-size: 0.78rem;
     color: var(--muted);
     letter-spacing: 0.04em;
-    display: block;
-    margin-top: 18px;
   }
 
-  .post-body{
+  .tags{ display:flex; flex-wrap:wrap; gap: 8px; }
+  .tags span{
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--verified-text);
+    border: 1px solid var(--rule);
+    padding: 3px 9px;
+  }
+
+  .project-body{
     max-width: 68ch;
     color: var(--chalk);
   }
-  .post-body :global(p){
+  .project-body :global(p){
     margin: 0 0 20px;
     color: var(--chalk);
   }
-  .post-body :global(h2){
+  .project-body :global(h2){
     font-size: var(--fs-h2);
     margin: 40px 0 16px;
   }
-  .post-body :global(h3){
+  .project-body :global(h3){
     font-size: 1.2rem;
     margin: 32px 0 14px;
   }
-  .post-body :global(a){ color: var(--seal-text); }
-  .post-body :global(ul), .post-body :global(ol){
+  .project-body :global(a){ color: var(--seal-text); }
+  .project-body :global(ul), .project-body :global(ol){
     margin: 0 0 20px;
     padding-left: 1.4em;
     color: var(--chalk);
   }
-  .post-body :global(li){ margin-bottom: 8px; }
-  .post-body :global(blockquote){
+  .project-body :global(li){ margin-bottom: 8px; }
+  .project-body :global(blockquote){
     margin: 24px 0;
     padding: 4px 20px;
     border-left: 2px solid var(--seal-text);
     color: var(--muted);
   }
-  .post-body :global(img){
+  .project-body :global(img){
     max-width: 100%;
     border: 1px solid var(--rule);
     margin: 24px 0;
   }
-  .post-body :global(pre){
+  .project-body :global(pre){
     background: var(--panel);
     border: 1px solid var(--rule);
     padding: 18px 20px;
@@ -157,13 +171,13 @@ const bodyHTML = post.body ? toHTML(post.body, {
     margin: 24px 0;
     font-size: 0.88rem;
   }
-  .post-body :global(code){
+  .project-body :global(code){
     font-family: var(--mono);
   }
-  .post-body :global(pre code){
+  .project-body :global(pre code){
     color: var(--verified-text);
   }
-  .post-body :global(:not(pre) > code){
+  .project-body :global(:not(pre) > code){
     background: var(--panel);
     border: 1px solid var(--rule);
     padding: 2px 6px;

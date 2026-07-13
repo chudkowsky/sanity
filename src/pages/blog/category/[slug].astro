@@ -1,21 +1,42 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import { sanityClient } from "../../lib/sanity";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { sanityClient } from "../../../lib/sanity";
+
+export async function getStaticPaths() {
+	function tagSlug(tag: string) {
+		return tag.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+	}
+
+	const posts = await sanityClient.fetch(`
+		*[_type == "blogPost" && defined(tags)] { tags }
+	`);
+
+	const slugs = new Map<string, string>();
+	for (const post of posts) {
+		for (const tag of post.tags ?? []) {
+			slugs.set(tagSlug(tag), tag);
+		}
+	}
+
+	return Array.from(slugs.entries()).map(([slug, tag]) => ({
+		params: { slug },
+		props: { tag },
+	}));
+}
+
+const { slug } = Astro.params;
+const { tag } = Astro.props;
 
 const posts = await sanityClient.fetch(`
-  *[_type == "blogPost"] | order(publishedAt desc) {
-    title,
-    slug,
-    publishedAt,
-    excerpt,
-    tags,
-    "coverImageUrl": coverImage.asset->url
-  }
-`);
-
-function tagSlug(tag: string) {
-	return tag.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
-}
+	*[_type == "blogPost" && $tag in tags] | order(publishedAt desc) {
+		title,
+		slug,
+		publishedAt,
+		excerpt,
+		tags,
+		"coverImageUrl": coverImage.asset->url
+	}
+`, { tag });
 
 function formatDate(dateStr: string) {
 	if (!dateStr) return "";
@@ -28,25 +49,22 @@ function formatDate(dateStr: string) {
 ---
 
 <BaseLayout
-	title="Blog | Visoft"
-	description="Writing on Starknet, zero-knowledge, and confidential compute engineering from the Visoft team."
+	title={`${tag} | Visoft Blog`}
+	description={`Posts on ${tag} from the Visoft team.`}
 >
 	<section class="hero hero--sub">
 		<div class="wrap">
-			<span class="eyebrow">Notes &amp; Field Reports</span>
-			<h1>The Visoft blog</h1>
-			<p class="lede">Writing on Starknet infrastructure, zero-knowledge proving, and TEE-based systems — from the engineers building it.</p>
+			<a class="back-link" href="/blog">← Back to blog</a>
+			<span class="eyebrow">Category</span>
+			<h1>{tag}</h1>
 		</div>
 	</section>
 
 	<section class="doc">
 		<div class="wrap">
 			<div class="section-ref">§ 01</div>
-			<div class="section-head">
-				<h2>All posts</h2>
-			</div>
 			<div class="section-body">
-				{posts.length === 0 && <p class="empty">Nothing published yet — check back soon.</p>}
+				{posts.length === 0 && <p class="empty">No posts tagged {tag} yet.</p>}
 				<div class="post-grid">
 					{posts.map((post: any) => (
 						<a class="post-card" href={`/blog/${post.slug.current}`}>
@@ -60,16 +78,6 @@ function formatDate(dateStr: string) {
 								{post.publishedAt && <span class="post-date">{formatDate(post.publishedAt)}</span>}
 								<h3>{post.title}</h3>
 								{post.excerpt && <p>{post.excerpt}</p>}
-								{post.tags && post.tags.length > 0 && (
-									<div class="tags">
-										{post.tags.map((tag: string) => (
-											<span
-												class="tag-pill"
-												onclick={`event.preventDefault(); event.stopPropagation(); window.location.href='/blog/category/${tagSlug(tag)}';`}
-											>{tag}</span>
-										))}
-									</div>
-								)}
 							</div>
 						</a>
 					))}
@@ -85,9 +93,17 @@ function formatDate(dateStr: string) {
 		border-bottom: 1px solid var(--rule);
 	}
 	.hero--sub .wrap{ max-width: 780px; }
-	.hero--sub .eyebrow{ margin-bottom: 18px; display:block; }
-	.hero--sub h1{ font-size: var(--fs-h1); margin-bottom: 20px; }
-	.hero--sub .lede{ font-size: 1.12rem; color: var(--muted); max-width: 62ch; margin: 0; }
+	.hero--sub .eyebrow{ margin: 14px 0 10px; display:block; }
+	.hero--sub h1{ font-size: var(--fs-h1); margin: 0; text-transform: capitalize; }
+
+	.back-link{
+		font-family: var(--mono);
+		font-size: 0.85rem;
+		color: var(--muted);
+		text-decoration: none;
+		display: inline-block;
+	}
+	.back-link:hover{ color: var(--chalk); }
 
 	.empty{ color: var(--muted); }
 
@@ -149,8 +165,6 @@ function formatDate(dateStr: string) {
 	.post-card-body{
 		padding: 22px 24px 26px;
 		flex: 1;
-		display: flex;
-		flex-direction: column;
 	}
 
 	.post-date{
@@ -168,17 +182,6 @@ function formatDate(dateStr: string) {
 	.post-card p{
 		color: var(--muted);
 		font-size: var(--fs-small);
-		margin: 0 0 14px;
+		margin: 0;
 	}
-
-	.tags{ display:flex; flex-wrap:wrap; gap: 8px; margin-top: auto; padding-top: 4px; }
-	.tag-pill{
-		font-family: var(--mono);
-		font-size: 0.72rem;
-		color: var(--verified-text);
-		border: 1px solid var(--rule);
-		padding: 3px 9px;
-		cursor: pointer;
-	}
-	.tag-pill:hover{ border-color: var(--verified-text); }
 </style>

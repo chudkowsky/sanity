@@ -1,5 +1,24 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { sanityClient } from "../lib/sanity";
+
+function tagSlug(tag: string) {
+	return tag.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+}
+
+const taggedPosts = await sanityClient.fetch(`
+	*[_type == "blogPost" && defined(tags)] { tags }
+`);
+
+const categoryMap = new Map<string, string>();
+for (const post of taggedPosts) {
+	for (const tag of post.tags ?? []) {
+		categoryMap.set(tagSlug(tag), tag);
+	}
+}
+const categories = Array.from(categoryMap.entries())
+	.map(([slug, tag]) => ({ slug, tag }))
+	.sort((a, b) => a.tag.localeCompare(b.tag));
 
 const faqJsonLd = {
 	"@context": "https://schema.org",
@@ -35,26 +54,26 @@ const faqJsonLd = {
 ---
 
 <BaseLayout
-	title="Visoft — Web3, ZK &amp; Fintech Engineering Partner"
-	description="Visoft builds and ships web3, zero-knowledge, TLSN and fintech infrastructure for startups and research teams — from protocol design to production."
+	title="Visoft — Starknet, Zero-Knowledge &amp; Confidential Compute Engineering"
+	description="Visoft is a five-engineer team building Starknet L2/L3 infrastructure, STARK proving pipelines, and TEE-based confidential compute systems — from protocol design to production."
 >
 	<Fragment slot="head">
-		<meta property="og:title" content="Web3, ZK &amp; Fintech Development Partner for Startups | Visoft" />
-		<meta property="og:description" content="Visoft builds and ships web3, zero-knowledge, TLSN and fintech infrastructure for startups and research teams — from protocol design to production." />
+		<meta property="og:title" content="Starknet, Zero-Knowledge &amp; TEE Infrastructure Partner | Visoft" />
+		<meta property="og:description" content="Visoft is a five-engineer team building Starknet L2/L3 infrastructure, STARK proving pipelines, and TEE-based confidential compute systems — from protocol design to production." />
 		<script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
 	</Fragment>
 
 	<section class="hero">
 		<div class="wrap">
-			<span class="eyebrow">Web3 · Zero-Knowledge · TLSN · Fintech</span>
+			<span class="eyebrow">Starknet · Zero-Knowledge · Confidential Compute · Cross-Chain</span>
 			<h1>Engineering partner for teams that can't afford to wait</h1>
-			<p class="lede">Tired of agencies that need six weeks of onboarding to understand what a nullifier is? Visoft builds for cryptography-heavy, high-stakes domains — web3 protocols, zero-knowledge systems, TLSN-based verification, fintech infrastructure — where "we'll figure it out as we go" isn't good enough.</p>
-			<p class="lede">Every engagement starts with engineers who already speak your stack. You get production-grade code, reviewed cryptographic assumptions, and a team that ships on the timeline a fundraising round or research deadline actually demands.</p>
+			<p class="lede">We're a five-person team — a lead and four engineers — with years spent shipping Starknet infrastructure: appchain sequencers, STARK proving pipelines, TEE-based settlement systems. Not a generalist shop picking up cryptography on your project's dime.</p>
+			<p class="lede">Every engagement starts with engineers who've already shipped in this exact stack. You get production-grade code, reviewed trust assumptions, and a team that ships on the timeline a fundraising round or mainnet deadline actually demands.</p>
 			<a class="cta" href="#process">See how we work</a>
 			<div class="marquee">
 				<div class="marquee-track">
-					<span>Solidity</span><span>circom</span><span>halo2</span><span>groth16</span><span>plonk</span><span>TLSN</span><span>MPC-TLS</span><span>FROST</span><span>Schnorr</span><span>Rust</span><span>Move</span><span>EVM</span>
-					<span>Solidity</span><span>circom</span><span>halo2</span><span>groth16</span><span>plonk</span><span>TLSN</span><span>MPC-TLS</span><span>FROST</span><span>Schnorr</span><span>Rust</span><span>Move</span><span>EVM</span>
+					<span>Cairo</span><span>Rust</span><span>Solidity</span><span>Starknet</span><span>STARK</span><span>SP1</span><span>Groth16</span><span>AMD SEV-SNP</span><span>Solana</span><span>Celestia</span>
+					<span>Cairo</span><span>Rust</span><span>Solidity</span><span>Starknet</span><span>STARK</span><span>SP1</span><span>Groth16</span><span>AMD SEV-SNP</span><span>Solana</span><span>Celestia</span>
 				</div>
 			</div>
 		</div>
@@ -71,7 +90,7 @@ const faqJsonLd = {
 				<div class="ledger">
 					<div>
 						<h3>Speed without the ramp-up</h3>
-						<p>Engineers are matched to your stack from day one — Solidity, circom, halo2, TLSN, Rust — so the first two weeks are spent shipping, not explaining what a Merkle proof is.</p>
+						<p>Engineers are matched to your stack from day one — Cairo, Rust, STARK proving, TEE attestation — so the first two weeks are spent shipping, not explaining what a Merkle proof is.</p>
 					</div>
 					<div>
 						<h3>Production-grade quality</h3>
@@ -91,7 +110,7 @@ const faqJsonLd = {
 			<div class="section-ref">§ 02</div>
 			<div class="section-head">
 				<h2>How we take a project from idea to production</h2>
-				<p>Every engagement — a zero-knowledge circuit, a TLSN integration, a fintech settlement layer — follows the same four-stage process.</p>
+				<p>Every engagement — a proving pipeline, a TEE-based settlement system, a cross-chain verifier — follows the same four-stage process.</p>
 			</div>
 			<div class="section-body">
 				<div class="timeline">
@@ -138,20 +157,20 @@ const faqJsonLd = {
 			<div class="section-body">
 				<div class="grid-2">
 					<div>
-						<h3>Web3 &amp; smart contract systems</h3>
-						<p>Protocol and smart contract development across EVM and non-EVM chains, built for teams that need code ready for an audit, not just a testnet demo.</p>
+						<h3>Starknet L2/L3 infrastructure</h3>
+						<p>Appchain sequencers, settlement orchestration, and cross-chain messaging for teams running dedicated Starknet-based rollups.</p>
 					</div>
 					<div>
-						<h3>Zero-knowledge systems</h3>
-						<p>Circuit design and implementation using circom, halo2, and related toolchains, for privacy-preserving or scalability-focused ZK applications.</p>
+						<h3>Zero-knowledge proving pipelines</h3>
+						<p>STARK proving and recursive verification, plus SP1/Groth16-based proving paths, sized to real constraints around prover time and onchain verification cost.</p>
 					</div>
 					<div>
-						<h3>TLSN &amp; verifiable web data</h3>
-						<p>Integration of TLS Notary-based proof systems for teams that need to verify off-chain data without trusting a centralized oracle.</p>
+						<h3>Confidential compute &amp; TEE systems</h3>
+						<p>AMD SEV-SNP attestation-based architectures for teams that need a hardware-backed trust anchor instead of a trusted operator.</p>
 					</div>
 					<div>
-						<h3>Fintech &amp; settlement infrastructure</h3>
-						<p>Trading engines, escrow logic, and settlement systems for fintech startups building products where correctness bugs mean lost funds.</p>
+						<h3>Cross-chain settlement &amp; data availability</h3>
+						<p>Proof verification across chains and data-availability integrations for rollups that settle or publish outside their home chain.</p>
 					</div>
 				</div>
 			</div>
@@ -184,7 +203,7 @@ const faqJsonLd = {
 				<div class="ledger">
 					<div>
 						<h3>Domain fluency, not just availability</h3>
-						<p>Engineers arrive already fluent in the primitives — commitments, threshold signatures, selective disclosure — so discussions move at the pace your team expects.</p>
+						<p>Engineers arrive already fluent in the primitives — STARK proofs, TEE attestation, slot-ownership verification — so discussions move at the pace your team expects.</p>
 					</div>
 					<div>
 						<h3>Built for scrutiny</h3>
@@ -207,39 +226,58 @@ const faqJsonLd = {
 			</div>
 			<div class="section-body">
 				<div class="expertise-item">
-					<h3>Zero-knowledge proof systems</h3>
-					<p>Practical experience across proving systems, applied to real constraints around circuit size, prover time, and verification cost.</p>
-					<div class="tags"><span>circom</span><span>halo2</span><span>groth16</span><span>plonk</span></div>
+					<h3>STARK proving pipelines</h3>
+					<p>Practical experience across STARK proof generation, splitting, and onchain verification, applied to real constraints around prover time and verification cost.</p>
+					<div class="tags"><span>Cairo</span><span>STARK</span><span>Starknet OS</span></div>
 				</div>
 				<div class="expertise-item">
-					<h3>TLS Notary (TLSN) integrations</h3>
-					<p>Implementation of TLSN-based attestation flows that let applications verify real-world data without a trusted intermediary.</p>
-					<div class="tags"><span>TLSN</span><span>selective disclosure</span><span>MPC-TLS</span></div>
+					<h3>Confidential compute (TEE)</h3>
+					<p>Hardware-attested execution environments used as a trust anchor for off-chain computation that still needs to settle onchain.</p>
+					<div class="tags"><span>AMD SEV-SNP</span><span>SP1</span><span>Groth16</span></div>
 				</div>
 				<div class="expertise-item">
-					<h3>Threshold signatures &amp; distributed key systems</h3>
-					<p>Design and implementation of threshold signing schemes for teams that need to remove single points of control from fund movement.</p>
-					<div class="tags"><span>FROST</span><span>Schnorr</span><span>MPC</span></div>
+					<h3>Cross-chain settlement &amp; data availability</h3>
+					<p>Verifying proofs across chains and integrating data-availability layers for rollups that settle or publish beyond their home chain.</p>
+					<div class="tags"><span>Solana</span><span>Celestia</span><span>DA</span></div>
 				</div>
 				<div class="expertise-item">
-					<h3>Smart contract &amp; protocol engineering</h3>
-					<p>Contract architecture and implementation across EVM and non-EVM environments, written with audit-readiness as a default.</p>
-					<div class="tags"><span>Solidity</span><span>Rust</span><span>Move</span><span>EVM</span></div>
+					<h3>Sequencer &amp; appchain engineering</h3>
+					<p>Sequencer and settlement-contract development for dedicated Starknet-based appchains, written with production operation in mind.</p>
+					<div class="tags"><span>Rust</span><span>Cairo</span><span>Solidity</span></div>
 				</div>
 			</div>
 		</div>
 	</section>
 
+	{categories.length > 0 && (
+		<section class="doc">
+			<div class="wrap">
+				<div class="section-ref">§ 07</div>
+				<div class="section-head">
+					<h2>Browse by category</h2>
+					<p>Blog posts grouped by the systems and primitives they cover.</p>
+				</div>
+				<div class="section-body">
+					<div class="category-cloud">
+						{categories.map((c) => (
+							<a class="category-pill" href={`/blog/category/${c.slug}`}>{c.tag}</a>
+						))}
+					</div>
+				</div>
+			</div>
+		</section>
+	)}
+
 	<section class="doc">
 		<div class="wrap">
-			<div class="section-ref">§ 07</div>
+			<div class="section-ref">§ 08</div>
 			<div class="section-head">
 				<h2>Explore more</h2>
 			</div>
 			<div class="section-body">
 				<div class="hub">
-					<a href="/blog"><span class="eyebrow">Blog</span>Writing on web3, zero-knowledge, TLSN, and fintech engineering.</a>
-					<a href="#"><span class="eyebrow">Tech Stack</span>The tools, languages, and cryptographic primitives our engineers work in daily.</a>
+					<a href="/work"><span class="eyebrow">Work</span>Starknet infrastructure, ZK proving, and TEE systems we've shipped.</a>
+					<a href="/blog"><span class="eyebrow">Blog</span>Writing on Starknet, zero-knowledge, and confidential compute engineering.</a>
 					<a href="#"><span class="eyebrow">Engagement Models</span>How embedded, fixed-scope, and flexible engagements are priced and scoped.</a>
 					<a href="#"><span class="eyebrow">FAQ</span>Answers on IP ownership, NDAs, timelines, and technical scoping.</a>
 				</div>
@@ -249,7 +287,7 @@ const faqJsonLd = {
 
 	<section class="doc">
 		<div class="wrap">
-			<div class="section-ref">§ 08</div>
+			<div class="section-ref">§ 09</div>
 			<div class="section-head">
 				<h2>What to know before you engage</h2>
 				<p>Working with a specialized partner still means a few things are on you to get right.</p>
@@ -275,7 +313,7 @@ const faqJsonLd = {
 
 	<section class="doc">
 		<div class="wrap">
-			<div class="section-ref">§ 09</div>
+			<div class="section-ref">§ 10</div>
 			<div class="section-head">
 				<h2>Frequently asked questions</h2>
 			</div>
@@ -430,10 +468,23 @@ const faqJsonLd = {
 		padding: 4px 9px;
 	}
 
+	/* ---------- category cloud ---------- */
+	.category-cloud{ display:flex; flex-wrap:wrap; gap: 10px; }
+	.category-pill{
+		font-family: var(--mono);
+		font-size: 0.8rem;
+		letter-spacing: 0.02em;
+		color: var(--verified-text);
+		border: 1px solid var(--rule);
+		padding: 8px 16px;
+		text-decoration: none;
+	}
+	.category-pill:hover{ border-color: var(--verified-text); background: var(--panel); }
+
 	/* ---------- explore hub ---------- */
 	.hub{
 		display:grid;
-		grid-template-columns: repeat(4, minmax(0,1fr));
+		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 		gap: 1px;
 		background: var(--rule);
 		border: 1px solid var(--rule);
